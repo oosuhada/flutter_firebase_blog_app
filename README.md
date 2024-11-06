@@ -1,59 +1,68 @@
-# Flutter Firebase Blog App
+# Dev Journal — Flutter + Firebase
 
-Flutter와 Firebase를 연결해 글 목록·작성 흐름, 이미지 업로드, Riverpod 상태 관리, Firestore/Storage repository 사용을 연습한 초기 블로그 프로젝트입니다.
+A compact mobile developer journal built with Flutter, Riverpod, Firestore, and Firebase Storage. The project keeps the original Firebase CRUD path, but presents it as a small Android-first blog product rather than an empty learning demo.
 
-An early Flutter + Firebase blog project for practicing post lists, writing flows, image upload, Riverpod state, Firestore, and Firebase Storage.
+## Android Emulator preview
 
-## UI Preview / 구현 화면
+| Feed | Post detail | Write post |
+| --- | --- | --- |
+| ![Dev Journal feed](.github/assets/portfolio/01-feed.png) | ![Post detail](.github/assets/portfolio/02-post-detail.png) | ![Write post](.github/assets/portfolio/03-write-post.png) |
 
-![Flutter Firebase blog interface](.github/assets/ui-preview.png)
+The screenshots are captured from an Android Emulator. When Firestore is empty or unavailable, the app enters an explicit **portfolio preview mode** with local sample content and deterministic local cover artwork, so the UI stays meaningful without relying on network images or private Firebase credentials.
 
-현재 이미지는 Android Emulator에서 기본 앱을 실행해 최근 글 카드와 글쓰기 action이 함께 보이는 상태를 캡처한 것입니다. Firestore에 데이터가 없거나 연결할 수 없는 경우에는 **명시적인 portfolio sample posts**를 표시해 UI가 빈 화면이 되지 않도록 했습니다.
+## Product experience
 
-The screenshot is captured from the default app on an Android Emulator. When Firestore is empty or unavailable, the app explicitly shows portfolio sample posts instead of presenting a blank list.
+- **Dev Journal identity** — editorial hero, recent posts, topic chips, and a clear writing CTA.
+- **Visual post cards** — category, title, excerpt, author, date, and stable local artwork for every portfolio sample.
+- **Readable detail view** — large cover, metadata, reading time, article typography, and contextual edit/delete actions.
+- **Mobile-first editor** — cover picker, live visual preview, title/body/category/author fields, and publish/update actions inside one keyboard-safe scroll surface.
+- **Preview vs live data** — sample data lives in `lib/data/sample/`; the Firestore repository remains the live source of truth whenever documents are available.
+- **Firebase-safe Android config** — the Android `applicationId`/`namespace` match an Android client in `google-services.json`, with a regression test guarding the relationship.
 
-## Features / 주요 구현
+## Data modes
 
-- Firebase initialization and generated platform options
-- Firestore 기반 post repository
-- Firebase Storage를 사용한 이미지 업로드 경로
-- Riverpod을 사용한 상태 관리
-- 최근 글 목록 화면
-- Firebase empty/error 상태에서 명시적으로 표시되는 portfolio sample fallback
-- 새 글 작성 및 기존 글 편집을 고려한 write page
-- Flutter theme/app-bar styling 연습
+### Portfolio preview
 
-## Structure / 구조
+`HomeViewModel` starts with `portfolioSamplePosts`. If Firestore is unavailable or has no posts, that explicit preview stays visible. Sample detail and editor flows remain local and do not write mock content into Firebase.
+
+### Live Firebase
+
+When the `posts` Firestore stream returns data, the feed switches to live mode. Create/update operations upload the chosen cover to Firebase Storage and then write the post document to Firestore. Delete operations remove the live Firestore document.
+
+Existing post documents without a `category` field remain readable and fall back to `Development`.
+
+## Project structure
 
 ```text
 lib/
 ├── data/
 │   ├── model/post.dart
-│   └── repository/post_repository.dart
-├── ui/pages/
-│   ├── home/                 # recent posts
-│   └── write/                # create/edit post flow
+│   ├── repository/post_repository.dart
+│   └── sample/sample_posts.dart
+├── ui/
+│   ├── pages/home/
+│   ├── pages/detail/
+│   ├── pages/write/
+│   └── widgets/post_cover.dart
 ├── firebase_options.dart
 └── main.dart
 ```
 
-## Run / 실행
+## Run on Android
 
 ```bash
 flutter pub get
-flutter run
+flutter run -d emulator-5554
 ```
 
-Firebase-backed operations require a valid Firebase project/configuration. Do not commit private service credentials.
+Real Firebase writes require a valid project configuration and permissions. Portfolio preview does not require live Firestore documents or reachable image URLs.
 
-## Validate / 검증
+## Validation
 
 ```bash
 flutter analyze
 flutter test
-flutter run
+flutter build apk --debug
 ```
 
-2026-08-20 기준 dependency resolution, static analysis, widget test, Android Emulator build/run을 다시 검증했습니다. 이 프로젝트는 Firebase CRUD와 Flutter 상태 관리의 기초를 익힌 학습 기록으로 유지합니다.
-
-As of 2026-08-20, dependency resolution, static analysis, widget tests, and Android Emulator build/run were re-validated. This repository is preserved as an early learning artifact for Firebase CRUD and Flutter state management.
+The widget suite covers the preview feed, sample detail rendering, compact-screen editor layout, and the Android package/Firebase client match.

@@ -34,13 +34,15 @@ class PostRepository {
     required String content,
     required String writer,
     required String imgUrl,
+    required String category,
   }) async {
     debugPrint('PostRepository: insert 시작');
     try {
       if (title.trim().isEmpty ||
           content.trim().isEmpty ||
           writer.trim().isEmpty ||
-          imgUrl.trim().isEmpty) {
+          imgUrl.trim().isEmpty ||
+          category.trim().isEmpty) {
         debugPrint('PostRepository: 유효하지 않은 입력 데이터');
         return false;
       }
@@ -55,10 +57,11 @@ class PostRepository {
         'writer': writer,
         'createdAt': DateTime.now().toIso8601String(),
         'imgUrl': imgUrl,
+        'category': category,
       };
 
       debugPrint('PostRepository: Firestore에 데이터 삽입 시도');
-      docRef.set(map);
+      await docRef.set(map);
       debugPrint('PostRepository: insert 완료');
       return true;
     } catch (e) {
@@ -86,7 +89,7 @@ class PostRepository {
   Future<bool> delete(String id) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('posts').doc(id);
-      docRef.delete();
+      await docRef.delete();
       return true;
     } catch (e) {
       debugPrint('$e');
@@ -100,6 +103,7 @@ class PostRepository {
     required String title,
     required String content,
     required String imgUrl,
+    required String category,
   }) async {
     debugPrint('PostRepository: update 시작');
     try {
@@ -107,17 +111,19 @@ class PostRepository {
           title.trim().isEmpty ||
           content.trim().isEmpty ||
           writer.trim().isEmpty ||
-          imgUrl.trim().isEmpty) {
+          imgUrl.trim().isEmpty ||
+          category.trim().isEmpty) {
         debugPrint('PostRepository: 유효하지 않은 입력 데이터');
         return false;
       }
 
       final docRef = FirebaseFirestore.instance.collection('posts').doc(id);
-      docRef.update({
+      await docRef.update({
         'writer': writer,
         'title': title,
         'content': content,
         'imgUrl': imgUrl,
+        'category': category,
       });
       debugPrint('PostRepository: update 완료');
       return true;
