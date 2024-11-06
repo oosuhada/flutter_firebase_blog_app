@@ -9,37 +9,43 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BLOG'),
+        title: const Text('DEV JOURNAL'),
         centerTitle: false,
       ),
-      // 6. Scaffold body 영역의 색상
       backgroundColor: Colors.grey[200],
-      // 7. 패딩 적용
-      body: const Padding(
-        padding: EdgeInsets.all(20),
-        // 1. 레이아웃 배치
+      body: const SafeArea(
+        top: false,
         child: Column(
-          // 5. Expanded를 배치하면 Column의 크기는 정해지기 때문에
-          //    CrossAxisAlignment 설정해주기!
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 2. 텍스트 배치
-            Text(
-              '최근 글',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 18, 20, 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Build notes, shipped in Flutter',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'Firebase · Firestore · Riverpod · Storage',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 10),
-            // 3. 리스트뷰 배치
-            // ListView는 부모위젯의 크기가 있어야 하므로
-            // Column 내에서 사용 시 Expanded 배치!
-            // (Column은 디폴트로 크기가 정해지지 않은 위젯!)
             HomeListView(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
@@ -47,7 +53,8 @@ class HomePage extends StatelessWidget {
             },
           ));
         },
-        child: const Icon(Icons.edit),
+        icon: const Icon(Icons.edit_outlined),
+        label: const Text('새 글'),
       ),
     );
   }
