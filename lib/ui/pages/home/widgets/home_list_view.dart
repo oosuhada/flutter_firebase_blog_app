@@ -4,102 +4,161 @@ import 'package:flutter_firebase_blog_app/ui/pages/detail/detail_page.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/home/home_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Consumer(builder: (context, ref, child) {
-        final state = ref.watch(homeViewModel);
-        return ListView.separated(
-          itemCount: state.length,
-          separatorBuilder: (context, index) => SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            return item(state[index]);
-          },
-        );
-      }),
-    );
-  }
+class HomeListView extends ConsumerWidget {
+  const HomeListView({super.key});
 
-  Widget item(Post post) {
-    return Builder(builder: (context) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return DetailPage(post);
-            },
-          ));
-        },
-        child: SizedBox(
-          height: 120,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Positioned(
-                right: 0,
-                width: 120,
-                height: 120,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      post.imgUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(homeViewModel);
+
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (state.isSample)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  'Portfolio preview · sample posts',
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
-              Container(
-                width: double.infinity,
+            ),
+          Expanded(
+            child: ListView.separated(
+              itemCount: state.posts.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 14),
+              itemBuilder: (context, index) => _PostCard(
+                post: state.posts[index],
+                isSample: state.isSample,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PostCard extends StatelessWidget {
+  const _PostCard({required this.post, required this.isSample});
+
+  final Post post;
+  final bool isSample;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: isSample
+            ? null
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => DetailPage(post)),
+                );
+              },
+        child: SizedBox(
+          height: 132,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 124,
                 height: double.infinity,
-                margin: EdgeInsets.only(right: 100),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                // 5. padding 설정
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Column(
-                  // 6. 정렬 조정
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 4. Container 자녀요소 배치
-                    Text(
-                      post.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                child: _PostImage(post: post),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
-                    ),
-                    Spacer(),
-                    Text(
-                      post.content,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w200,
-                        color: Colors.grey,
-                        fontSize: 12,
+                      const SizedBox(height: 6),
+                      Text(
+                        post.content,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '${post.createdAt.year}.${post.createdAt.month}.${post.createdAt.day} ${post.createdAt.hour}:${post.createdAt.minute}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w200,
-                        color: Colors.grey,
-                        fontSize: 12,
+                      const Spacer(),
+                      Text(
+                        '${post.writer} · ${_date(post.createdAt)}',
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  String _date(DateTime time) {
+    String two(int value) => value.toString().padLeft(2, '0');
+    return '${time.year}.${two(time.month)}.${two(time.day)}';
+  }
+}
+
+class _PostImage extends StatelessWidget {
+  const _PostImage({required this.post});
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    if (post.imgUrl.trim().isNotEmpty) {
+      return Image.network(
+        post.imgUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => const _ImagePlaceholder(),
       );
-    });
+    }
+
+    return const _ImagePlaceholder();
+  }
+}
+
+class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+      ),
+      child: Center(
+        child: Icon(
+          Icons.article_outlined,
+          size: 42,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
+      ),
+    );
   }
 }
