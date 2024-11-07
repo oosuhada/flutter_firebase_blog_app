@@ -8,12 +8,16 @@ A compact mobile developer journal built with Flutter, Riverpod, Firestore, and 
 | --- | --- | --- |
 | ![Dev Journal feed](.github/assets/portfolio/01-feed.png) | ![Post detail](.github/assets/portfolio/02-post-detail.png) | ![Write post](.github/assets/portfolio/03-write-post.png) |
 
-The screenshots are captured from an Android Emulator. When Firestore is empty or unavailable, the app enters an explicit **portfolio preview mode** with local sample content and deterministic local cover artwork, so the UI stays meaningful without relying on network images or private Firebase credentials.
+All three bundled covers visible together:
+
+![Three local development-photo covers](.github/assets/portfolio/04-image-preview.png)
+
+The screenshots are captured from an Android Emulator. When Firestore is empty or unavailable, the app enters an explicit **portfolio preview mode** with local sample content and bundled development-photo covers, so the UI stays meaningful without depending on runtime network images or private Firebase credentials.
 
 ## Product experience
 
 - **Dev Journal identity** — editorial hero, recent posts, topic chips, and a clear writing CTA.
-- **Visual post cards** — category, title, excerpt, author, date, and stable local artwork for every portfolio sample.
+- **Visual post cards** — category, title, excerpt, author, date, and bundled local cover photography for every portfolio sample.
 - **Readable detail view** — large cover, metadata, reading time, article typography, and contextual edit/delete actions.
 - **Mobile-first editor** — cover picker, live visual preview, title/body/category/author fields, and publish/update actions inside one keyboard-safe scroll surface.
 - **Preview vs live data** — sample data lives in `lib/data/sample/`; the Firestore repository remains the live source of truth whenever documents are available.
@@ -47,6 +51,8 @@ lib/
 ├── firebase_options.dart
 └── main.dart
 ```
+
+`assets/images/posts/` contains the bundled preview covers used by the sample journal entries.
 
 ## Run on Android
 

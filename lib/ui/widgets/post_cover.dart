@@ -16,6 +16,13 @@ class PostCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageUrl = imageUrlOverride ?? post.imgUrl;
+    if (imageUrl.startsWith('asset:')) {
+      return _AssetCover(
+        assetPath: imageUrl.substring('asset:'.length),
+        post: post,
+        compact: compact,
+      );
+    }
     if (imageUrl.trim().isNotEmpty) {
       return Image.network(
         imageUrl,
@@ -27,6 +34,81 @@ class PostCover extends StatelessWidget {
     }
 
     return _LocalCover(post: post, compact: compact);
+  }
+}
+
+class _AssetCover extends StatelessWidget {
+  const _AssetCover({
+    required this.assetPath,
+    required this.post,
+    required this.compact,
+  });
+
+  final String assetPath;
+  final Post post;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          assetPath,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              _LocalCover(post: post, compact: compact),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: compact
+                  ? const [Color(0x08000000), Color(0x26000000)]
+                  : const [Color(0x02000000), Color(0x5C000000)],
+            ),
+          ),
+        ),
+        if (!compact)
+          Positioned(
+            left: 22,
+            right: 22,
+            bottom: 20,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.category.toUpperCase(),
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Colors.white.withValues(alpha: .88),
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.5,
+                                ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'DEV JOURNAL',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -.6,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
   }
 }
 
