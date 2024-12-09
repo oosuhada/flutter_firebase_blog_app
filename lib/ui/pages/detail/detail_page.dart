@@ -4,12 +4,12 @@ import 'package:flutter_firebase_blog_app/ui/pages/detail/detail_view_model.dart
 import 'package:flutter_firebase_blog_app/ui/pages/write/write_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends ConsumerWidget {
   DetailPage(this.post);
   Post post;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Consumer로 감싸주기!
 
     return Consumer(builder: (context, ref, child) {
