@@ -56,19 +56,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyADgWZn5O7ZVfv4yuxzbVo-rq-n_H3z0N0',
-    appId: '1:375984609441:android:c1a0cd2016ecc70d6638e0',
-    messagingSenderId: '375984609441',
-    projectId: 'firebase-blog-app-oosu',
-    storageBucket: 'firebase-blog-app-oosu.firebasestorage.app',
+    apiKey: 'AIzaSyDUtarxQq1GNqZ7_eQEaGBtrid2XtsbH2U',
+    appId: '1:892245255636:android:7fa54b6f46f075f5f6a241',
+    messagingSenderId: '892245255636',
+    projectId: 'flutter-firebase-blog-ap-81b30',
+    storageBucket: 'flutter-firebase-blog-ap-81b30.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA24FDpV83yApk-SyNDAr7vbfLwdqcvO7o',
-    appId: '1:375984609441:ios:d4c2d24ce31838ee6638e0',
-    messagingSenderId: '375984609441',
-    projectId: 'firebase-blog-app-oosu',
-    storageBucket: 'firebase-blog-app-oosu.firebasestorage.app',
+    apiKey: 'AIzaSyByjQL9CpEQWLo2ifiyqE-KExe0drvvt5c',
+    appId: '1:892245255636:ios:3167430a78e18a43f6a241',
+    messagingSenderId: '892245255636',
+    projectId: 'flutter-firebase-blog-ap-81b30',
+    storageBucket: 'flutter-firebase-blog-ap-81b30.firebasestorage.app',
     iosBundleId: 'com.example.flutterFirebaseBlogApp',
   );
+
 }

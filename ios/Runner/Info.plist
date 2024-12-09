@@ -45,5 +45,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>프로필 및 게시물 이미지 업로드, 채팅에서 이미지 전송을 위해 사진 라이브러리 접근이 필요합니다.</string>
+    
+    <key>NSCameraUsageDescription</key>
+    <string>프로필 및 게시물 이미지 촬영, 채팅에서 이미지 전송을 위해 카메라 접근이 필요합니다.</string>
+    
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>앱에서 생성된 이미지를 사진 라이브러리에 저장하기 위해 접근이 필요합니다.</string>
+    
+    <key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+    <true/>
 </dict>
 </plist>

@@ -33,34 +33,41 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
     required String title,
     required String content,
   }) async {
-    if (arg?.content == content &&
-        arg?.title == title &&
-        writer == arg?.writer &&
-        arg?.imgUrl == state.imageUrl) {
-      return false;
-    }
-    if (state.imageUrl == null) {
-      return false;
-    }
-    state = WritePageState(true, state.imageUrl);
-    final result = arg == null
-        ? await postRepository.insert(
-            writer: writer,
-            title: title,
-            content: content,
-            imgUrl: state.imageUrl!,
-          )
-        : await postRepository.update(
-            id: arg!.id,
-            writer: writer,
-            title: title,
-            content: content,
-            imgUrl: state.imageUrl!,
-          );
+    print('WriteViewModel: insert 메서드 시작');
 
-    await Future.delayed(Duration(seconds: 1));
-    state = WritePageState(false, state.imageUrl);
-    return result;
+    if (state.imageUrl == null) {
+      print('WriteViewModel: 이미지 URL이 없습니다.');
+      return false;
+    }
+
+    state = WritePageState(true, state.imageUrl);
+
+    try {
+      print('WriteViewModel: ${arg == null ? "새 포스트 작성" : "포스트 수정"} 시작');
+      final result = arg == null
+          ? await postRepository.insert(
+              writer: writer,
+              title: title,
+              content: content,
+              imgUrl: state.imageUrl!,
+            )
+          : await postRepository.update(
+              id: arg!.id,
+              writer: writer,
+              title: title,
+              content: content,
+              imgUrl: state.imageUrl!,
+            );
+
+      print('WriteViewModel: 작업 결과 - $result');
+      return result;
+    } catch (e) {
+      print('WriteViewModel: 에러 발생 - $e');
+      return false;
+    } finally {
+      state = WritePageState(false, state.imageUrl);
+      print('WriteViewModel: insert 메서드 종료');
+    }
   }
 
   Future<void> uploadImage(XFile xFile) async {
@@ -85,5 +92,8 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
   }
 }
 
-final writeViewModel = NotifierProvider.family
-    .autoDispose<WriteViewModel, WritePageState, Post?>(() => WriteViewModel());
+// 3. 뷰모델 관리자 만들기
+final writeViewModel = NotifierProvider.autoDispose
+    .family<WriteViewModel, WritePageState, Post?>(() {
+  return WriteViewModel();
+});

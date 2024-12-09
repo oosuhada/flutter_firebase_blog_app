@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "375984609441",
-    "project_id": "firebase-blog-app-oosu",
-    "storage_bucket": "firebase-blog-app-oosu.firebasestorage.app"
+    "project_number": "892245255636",
+    "project_id": "flutter-firebase-blog-ap-81b30",
+    "storage_bucket": "flutter-firebase-blog-ap-81b30.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:375984609441:android:c1a0cd2016ecc70d6638e0",
+        "mobilesdk_app_id": "1:892245255636:android:7fa54b6f46f075f5f6a241",
         "android_client_info": {
-          "package_name": "com.example.app.flu"
+          "package_name": "com.example.app.flutterFireba"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyADgWZn5O7ZVfv4yuxzbVo-rq-n_H3z0N0"
+          "current_key": "AIzaSyDUtarxQq1GNqZ7_eQEaGBtrid2XtsbH2U"
         }
       ],
       "services": {
@@ -26,34 +26,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:375984609441:android:9116b888e0c2a5ff6638e0",
+        "mobilesdk_app_id": "1:892245255636:android:44e7852ebbd5e003f6a241",
         "android_client_info": {
-          "package_name": "com.example.app.flutter"
+          "package_name": "com.example.app.flutterFirebaseBlogApp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyADgWZn5O7ZVfv4yuxzbVo-rq-n_H3z0N0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:375984609441:android:da784a8a045e45106638e0",
-        "android_client_info": {
-          "package_name": "com.example.app.flutter_"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyADgWZn5O7ZVfv4yuxzbVo-rq-n_H3z0N0"
+          "current_key": "AIzaSyDUtarxQq1GNqZ7_eQEaGBtrid2XtsbH2U"
         }
       ],
       "services": {

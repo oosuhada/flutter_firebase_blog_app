@@ -15,12 +15,15 @@ class WritePage extends ConsumerStatefulWidget {
 
 class _WritePageState extends ConsumerState<WritePage> {
   // 1. 수정일떈 TextEditingController에 값 할당
-  late final writerController =
-      TextEditingController(text: widget.post?.writer);
-  late final titleController = TextEditingController(text: widget.post?.title);
-  late final contentController =
-      TextEditingController(text: widget.post?.content);
-
+  late TextEditingController writerController = TextEditingController(
+    text: widget.post?.writer ?? '',
+  );
+  late TextEditingController titleController = TextEditingController(
+    text: widget.post?.title ?? '',
+  );
+  late TextEditingController contentController = TextEditingController(
+    text: widget.post?.content ?? '',
+  );
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -45,17 +48,19 @@ class _WritePageState extends ConsumerState<WritePage> {
           actions: [
             GestureDetector(
               onTap: () async {
-                // 수정!
-                if (!formKey.currentState!.validate()) {
-                  return;
-                }
-                final result = await vm.insert(
-                  writer: writerController.text,
-                  title: titleController.text,
-                  content: contentController.text,
-                );
-                if (result && mounted) {
-                  Navigator.pop(context);
+                print('완료 선택됨.');
+                //currentState는 null 값 가능
+                // 만약 null 값이라면 false 반환(유효성 검사 실패)
+                final result = formKey.currentState?.validate() ?? false;
+                if (result) {
+                  final insertResult = await vm.insert(
+                    writer: writerController.text,
+                    title: titleController.text,
+                    content: contentController.text,
+                  );
+                  if (insertResult) {
+                    Navigator.pop(context);
+                  }
                 }
               },
               child: Container(
