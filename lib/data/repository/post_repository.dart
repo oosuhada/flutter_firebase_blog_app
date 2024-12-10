@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 
@@ -32,14 +34,20 @@ class PostRepository {
     required String writer,
     required String imgUrl,
   }) async {
+    print('PostRepository: insert 시작');
     try {
+      if (title.trim().isEmpty ||
+          content.trim().isEmpty ||
+          writer.trim().isEmpty ||
+          imgUrl.trim().isEmpty) {
+        print('PostRepository: 유효하지 않은 입력 데이터');
+        return false;
+      }
+
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      // 컬렉션 레퍼런스 타입의 이름이 기억이 안나요! 혹은 매번 타입 치기 번거로워요! 할땐 final or var!!!
       final collectionRef = firestore.collection('posts');
-      // 새로운 문서를 생성할거니 id 비우고 문서참조 생성!
       final docRef = collectionRef.doc();
 
-      // 생성할 데이터 만들기!
       final map = {
         'title': title,
         'content': content,
@@ -47,11 +55,13 @@ class PostRepository {
         'createdAt': DateTime.now().toIso8601String(),
         'imgUrl': imgUrl,
       };
-      // 저장!
-      await docRef.set(map);
+
+      print('PostRepository: Firestore에 데이터 삽입 시도');
+      docRef.set(map);
+      print('PostRepository: insert 완료');
       return true;
     } catch (e) {
-      print(e);
+      print('PostRepository: insert 에러 - $e');
       return false;
     }
   }
@@ -75,7 +85,7 @@ class PostRepository {
   Future<bool> delete(String id) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('posts').doc(id);
-      await docRef.delete();
+      docRef.delete();
       return true;
     } catch (e) {
       print('$e');
@@ -90,17 +100,28 @@ class PostRepository {
     required String content,
     required String imgUrl,
   }) async {
+    print('PostRepository: update 시작');
     try {
+      if (id.trim().isEmpty ||
+          title.trim().isEmpty ||
+          content.trim().isEmpty ||
+          writer.trim().isEmpty ||
+          imgUrl.trim().isEmpty) {
+        print('PostRepository: 유효하지 않은 입력 데이터');
+        return false;
+      }
+
       final docRef = FirebaseFirestore.instance.collection('posts').doc(id);
-      await docRef.update({
+      docRef.update({
         'writer': writer,
         'title': title,
         'content': content,
         'imgUrl': imgUrl,
       });
+      print('PostRepository: update 완료');
       return true;
     } catch (e) {
-      print('$e');
+      print('PostRepository: update 에러 - $e');
       return false;
     }
   }
