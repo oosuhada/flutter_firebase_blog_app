@@ -3,6 +3,7 @@ import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/detail/detail_page.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/home/home_view_model.dart';
 import 'package:flutter_firebase_blog_app/ui/widgets/post_cover.dart';
+import 'package:flutter_firebase_blog_app/v2/v2_glass.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeListView extends ConsumerWidget {
@@ -15,40 +16,59 @@ class HomeListView extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'RECENT POSTS',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          letterSpacing: 1.5,
-                          fontWeight: FontWeight.w800,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Fresh from the build log',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -.6,
-                        ),
-                  ),
-                ],
+        AppGlassSurface(
+          borderRadius: BorderRadius.circular(22),
+          blurSigma: 12,
+          padding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'RECENT POSTS',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w800,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Fresh from the build log',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -.6,
+                              ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Text(
-              '${state.posts.length} notes',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(color: Colors.black45),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: .08),
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: .72),
+                  ),
+                ),
+                child: Text(
+                  '${state.posts.length} notes',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         ...state.posts.indexed.expand(
