@@ -49,7 +49,8 @@ class V2GlassTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white.withValues(alpha: .48),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: ink.withValues(alpha: .08)),
@@ -60,13 +61,15 @@ class V2GlassTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(color: seed.withValues(alpha: .72), width: 1.3),
+          borderSide:
+              BorderSide(color: seed.withValues(alpha: .72), width: 1.3),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size(48, 50),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
           textStyle: const TextStyle(fontWeight: FontWeight.w800),
         ),
       ),
@@ -121,6 +124,7 @@ class AppGlassSurface extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(28)),
     this.blurSigma = 18,
     this.tint,
+    this.surfaceOpacity,
     this.onTap,
     this.semanticLabel,
   });
@@ -130,6 +134,7 @@ class AppGlassSurface extends StatelessWidget {
   final BorderRadius borderRadius;
   final double blurSigma;
   final Color? tint;
+  final double? surfaceOpacity;
   final VoidCallback? onTap;
   final String? semanticLabel;
 
@@ -140,10 +145,22 @@ class AppGlassSurface extends StatelessWidget {
     final theme = Theme.of(context);
     final dark = theme.brightness == Brightness.dark;
     final baseTint = tint ?? (dark ? const Color(0xFF25262B) : Colors.white);
-    final accentTint = Color.lerp(baseTint, theme.colorScheme.primary, dark ? .16 : .10)!;
-    final topAlpha = highContrast ? (dark ? .96 : .98) : (dark ? .60 : .48);
-    final middleAlpha = highContrast ? (dark ? .94 : .96) : (dark ? .50 : .36);
-    final bottomAlpha = highContrast ? (dark ? .92 : .94) : (dark ? .42 : .28);
+    final accentTint =
+        Color.lerp(baseTint, theme.colorScheme.primary, dark ? .16 : .10)!;
+    final requestedOpacity = surfaceOpacity?.clamp(.0, 1.0);
+    final middleAlpha = highContrast
+        ? (dark ? .94 : .96)
+        : requestedOpacity ?? (dark ? .50 : .36);
+    final topAlpha = highContrast
+        ? (dark ? .96 : .98)
+        : requestedOpacity == null
+            ? (dark ? .60 : .48)
+            : (middleAlpha + .10).clamp(.0, 1.0);
+    final bottomAlpha = highContrast
+        ? (dark ? .92 : .94)
+        : requestedOpacity == null
+            ? (dark ? .42 : .28)
+            : (middleAlpha - .08).clamp(.0, 1.0);
     final edge = dark
         ? Colors.white.withValues(alpha: highContrast ? .32 : .28)
         : Colors.white.withValues(alpha: highContrast ? .96 : .78);
@@ -242,7 +259,8 @@ class AppGlassSurface extends StatelessWidget {
 }
 
 class AppGlassNavItem {
-  const AppGlassNavItem({required this.icon, required this.label, this.selectedIcon});
+  const AppGlassNavItem(
+      {required this.icon, required this.label, this.selectedIcon});
   final IconData icon;
   final IconData? selectedIcon;
   final String label;
@@ -261,7 +279,8 @@ class AppGlassNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final scheme = Theme.of(context).colorScheme;
     return SafeArea(
       top: false,
@@ -285,21 +304,30 @@ class AppGlassNavigationBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24),
                     onTap: () => onSelected(index),
                     child: AnimatedContainer(
-                      duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 240),
+                      duration: reduceMotion
+                          ? Duration.zero
+                          : const Duration(milliseconds: 240),
                       curve: Curves.easeOutCubic,
                       constraints: const BoxConstraints(minHeight: 54),
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 7),
                       decoration: BoxDecoration(
-                        color: selected ? scheme.primary.withValues(alpha: .11) : Colors.transparent,
+                        color: selected
+                            ? scheme.primary.withValues(alpha: .11)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            selected ? (item.selectedIcon ?? item.icon) : item.icon,
+                            selected
+                                ? (item.selectedIcon ?? item.icon)
+                                : item.icon,
                             size: 22,
-                            color: selected ? scheme.primary : scheme.onSurfaceVariant,
+                            color: selected
+                                ? scheme.primary
+                                : scheme.onSurfaceVariant,
                           ),
                           const SizedBox(height: 3),
                           Text(
@@ -308,8 +336,11 @@ class AppGlassNavigationBar extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 10.5,
-                              fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                              color: selected ? scheme.primary : scheme.onSurfaceVariant,
+                              fontWeight:
+                                  selected ? FontWeight.w800 : FontWeight.w600,
+                              color: selected
+                                  ? scheme.primary
+                                  : scheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -347,14 +378,17 @@ class AppGlassActionButton extends StatelessWidget {
       semanticLabel: semanticLabel ?? label,
       borderRadius: BorderRadius.circular(24),
       blurSigma: 18,
-      padding: EdgeInsets.symmetric(horizontal: label == null ? 16 : 18, vertical: 14),
+      padding: EdgeInsets.symmetric(
+          horizontal: label == null ? 16 : 18, vertical: 14),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 21, color: scheme.primary),
           if (label != null) ...[
             const SizedBox(width: 9),
-            Text(label!, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w800)),
+            Text(label!,
+                style: TextStyle(
+                    color: scheme.onSurface, fontWeight: FontWeight.w800)),
           ],
         ],
       ),
@@ -363,7 +397,8 @@ class AppGlassActionButton extends StatelessWidget {
 }
 
 class AppGlassSearchButton extends StatelessWidget {
-  const AppGlassSearchButton({super.key, required this.hint, required this.onTap, this.trailing});
+  const AppGlassSearchButton(
+      {super.key, required this.hint, required this.onTap, this.trailing});
   final String hint;
   final VoidCallback onTap;
   final Widget? trailing;
