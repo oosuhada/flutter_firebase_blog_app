@@ -415,9 +415,9 @@ class AppGlassTag extends StatelessWidget {
     return AppGlassSurface(
       tint: tint,
       surfaceOpacity: surfaceOpacity,
-      blurSigma: 14,
-      borderRadius: BorderRadius.circular(15),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      blurSigma: 22,
+      borderRadius: BorderRadius.circular(14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       child: Text(
         label,
         style: TextStyle(
