@@ -72,6 +72,16 @@ The repository contains the generated Firebase client configuration used by the 
 
 레포지토리에는 앱에서 사용하는 생성된 Firebase client 설정이 포함되어 있습니다. 실제 쓰기 기능을 사용하려면 연결된 Firebase 프로젝트에서 Firestore/Storage 서비스와 권한이 활성화되어 있어야 합니다. live data를 사용할 수 없는 경우에도 local portfolio preview는 정상적으로 확인할 수 있습니다.
 
-## Topics
+## Architecture & Topics / 아키텍처 및 주제
 
-[`dart`](https://github.com/topics/dart) · [`firebase`](https://github.com/topics/firebase) · [`firebase-storage`](https://github.com/topics/firebase-storage) · [`firestore`](https://github.com/topics/firestore) · [`flutter`](https://github.com/topics/flutter) · [`mobile-app`](https://github.com/topics/mobile-app) · [`repository-pattern`](https://github.com/topics/repository-pattern) · [`riverpod`](https://github.com/topics/riverpod) · [`authentication`](https://github.com/topics/authentication) · [`clean-architecture`](https://github.com/topics/clean-architecture) · [`blog`](https://github.com/topics/blog) · [`state-management`](https://github.com/topics/state-management) · [`cross-platform`](https://github.com/topics/cross-platform) · [`flutter-app`](https://github.com/topics/flutter-app) · [`mobile-development`](https://github.com/topics/mobile-development) · [`cloud-storage`](https://github.com/topics/cloud-storage)
+**Architecture / 아키텍처**<br>
+[`clean-architecture`](https://github.com/topics/clean-architecture) · [`repository-pattern`](https://github.com/topics/repository-pattern) · [`reactive-state-management`](https://github.com/topics/reactive-state-management) · [`backend-as-a-service`](https://github.com/topics/backend-as-a-service) · [`authentication-flow`](https://github.com/topics/authentication-flow) · [`event-driven-ui`](https://github.com/topics/event-driven-ui) · [`cloud-storage-pattern`](https://github.com/topics/cloud-storage-pattern)
+
+**Core technologies / 핵심 기술**<br>
+[`firebase`](https://github.com/topics/firebase) · [`firestore`](https://github.com/topics/firestore)
+
+**Project context / 프로젝트 맥락**<br>
+[`authentication`](https://github.com/topics/authentication) · [`blog`](https://github.com/topics/blog) · [`cloud-storage`](https://github.com/topics/cloud-storage) · [`cross-platform`](https://github.com/topics/cross-platform) · [`firebase-storage`](https://github.com/topics/firebase-storage) · [`flutter-app`](https://github.com/topics/flutter-app) · [`mobile-app`](https://github.com/topics/mobile-app) · [`mobile-development`](https://github.com/topics/mobile-development) · [`state-management`](https://github.com/topics/state-management)
+
+**Implementation stack / 구현 스택**<br>
+[`dart`](https://github.com/topics/dart) · [`flutter`](https://github.com/topics/flutter) · [`riverpod`](https://github.com/topics/riverpod)
