@@ -21,7 +21,8 @@ class HomeViewModel extends Notifier<HomeState> {
       title: 'Flutter와 Firebase로 글 목록 만들기',
       content: 'Firestore stream을 Riverpod 상태와 연결해 최근 글 목록을 갱신하는 학습 기록입니다.',
       createdAt: DateTime(2026, 8, 20, 18, 20),
-      imgUrl: '',
+      imgUrl:
+          'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=85',
     ),
     Post(
       id: 'sample-2',
@@ -29,7 +30,8 @@ class HomeViewModel extends Notifier<HomeState> {
       title: '이미지 업로드와 글쓰기 흐름',
       content: 'Firebase Storage 업로드 이후 post document를 작성하는 흐름을 구현했습니다.',
       createdAt: DateTime(2026, 8, 19, 21, 10),
-      imgUrl: '',
+      imgUrl:
+          'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=85',
     ),
     Post(
       id: 'sample-3',
@@ -37,7 +39,8 @@ class HomeViewModel extends Notifier<HomeState> {
       title: 'Riverpod으로 상세 화면 상태 관리',
       content: '목록에서 상세 화면으로 이동하고 수정·삭제 상태를 구독하는 예제입니다.',
       createdAt: DateTime(2026, 8, 18, 15, 40),
-      imgUrl: '',
+      imgUrl:
+          'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=85',
     ),
   ];
 
