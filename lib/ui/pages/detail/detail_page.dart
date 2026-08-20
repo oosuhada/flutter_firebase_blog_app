@@ -5,8 +5,8 @@ import 'package:flutter_firebase_blog_app/ui/pages/write/write_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailPage extends ConsumerWidget {
-  DetailPage(this.post);
-  Post post;
+  const DetailPage(this.post, {super.key});
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +29,7 @@ class DetailPage extends ConsumerWidget {
             button(Icons.delete, () async {
               final result =
                   await ref.read(detailViewModel(post).notifier).delete();
-              if (result) {
+              if (result && context.mounted) {
                 Navigator.pop(context);
               }
             }),

@@ -4,39 +4,72 @@ import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/data/repository/post_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// 1. 상태 클래스 => List<Post> 로 사용
-// 2. ViewModel 구현
-class HomeViewModel extends Notifier<List<Post>> {
-  HomeViewModel();
+class HomeState {
+  const HomeState({required this.posts, required this.isSample});
 
-  @override
-  List<Post> build() {
-    fetchData();
-    return [];
-  }
+  final List<Post> posts;
+  final bool isSample;
+}
 
+class HomeViewModel extends Notifier<HomeState> {
   final postRepository = const PostRepository();
 
-  Future<void> fetchData() async {
-    // state = await postRepository.getAll();
-    // 1. 스트림을 받아옵니다
-    final stream = postRepository.postListStream();
-    // 2. 스트림의 변경사항을 구독하고 상태를 업데이트 해줍니다!
-    final streamSubscription = stream.listen(
-      (newList) {
-        state = newList;
-      },
-    );
+  static final List<Post> samplePosts = [
+    Post(
+      id: 'sample-1',
+      writer: 'oosuhada',
+      title: 'Flutter와 Firebase로 글 목록 만들기',
+      content: 'Firestore stream을 Riverpod 상태와 연결해 최근 글 목록을 갱신하는 학습 기록입니다.',
+      createdAt: DateTime(2026, 8, 20, 18, 20),
+      imgUrl: '',
+    ),
+    Post(
+      id: 'sample-2',
+      writer: 'oosuhada',
+      title: '이미지 업로드와 글쓰기 흐름',
+      content: 'Firebase Storage 업로드 이후 post document를 작성하는 흐름을 구현했습니다.',
+      createdAt: DateTime(2026, 8, 19, 21, 10),
+      imgUrl: '',
+    ),
+    Post(
+      id: 'sample-3',
+      writer: 'oosuhada',
+      title: 'Riverpod으로 상세 화면 상태 관리',
+      content: '목록에서 상세 화면으로 이동하고 수정·삭제 상태를 구독하는 예제입니다.',
+      createdAt: DateTime(2026, 8, 18, 15, 40),
+      imgUrl: '',
+    ),
+  ];
 
-    // 2. 이 뷰모델이 없어질 때 구독을 끝내주어야 메모리에서 안전하게 제거가 돼요!
-    ref.onDispose(
-      () {
-        streamSubscription.cancel();
-      },
-    );
+  @override
+  HomeState build() {
+    _listenStream();
+    return HomeState(posts: samplePosts, isSample: true);
+  }
+
+  void _listenStream() {
+    StreamSubscription<List<Post>>? subscription;
+
+    try {
+      subscription = postRepository.postListStream().listen(
+        (posts) {
+          if (posts.isNotEmpty) {
+            state = HomeState(posts: posts, isSample: false);
+          }
+        },
+        onError: (_) {
+          state = HomeState(posts: samplePosts, isSample: true);
+        },
+      );
+    } catch (_) {
+      state = HomeState(posts: samplePosts, isSample: true);
+    }
+
+    ref.onDispose(() {
+      subscription?.cancel();
+    });
   }
 }
 
-// 3. ViewModel 관리자 구현
 final homeViewModel =
-    NotifierProvider<HomeViewModel, List<Post>>(() => HomeViewModel());
+    NotifierProvider<HomeViewModel, HomeState>(() => HomeViewModel());

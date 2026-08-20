@@ -48,7 +48,6 @@ class _WritePageState extends ConsumerState<WritePage> {
           actions: [
             GestureDetector(
               onTap: () async {
-                print('완료 선택됨.');
                 //currentState는 null 값 가능
                 // 만약 null 값이라면 false 반환(유효성 검사 실패)
                 final result = formKey.currentState?.validate() ?? false;
@@ -58,7 +57,7 @@ class _WritePageState extends ConsumerState<WritePage> {
                     title: titleController.text,
                     content: contentController.text,
                   );
-                  if (insertResult) {
+                  if (insertResult && context.mounted) {
                     Navigator.pop(context);
                   }
                 }

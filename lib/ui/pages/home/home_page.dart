@@ -3,16 +3,19 @@ import 'package:flutter_firebase_blog_app/ui/pages/home/widgets/home_list_view.d
 import 'package:flutter_firebase_blog_app/ui/pages/write/write_page.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BLOG'),
+        title: const Text('BLOG'),
+        centerTitle: false,
       ),
       // 6. Scaffold body 영역의 색상
       backgroundColor: Colors.grey[200],
       // 7. 패딩 적용
-      body: Padding(
+      body: const Padding(
         padding: EdgeInsets.all(20),
         // 1. 레이아웃 배치
         child: Column(
@@ -40,11 +43,11 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return WritePage(post: null);
+              return const WritePage(post: null);
             },
           ));
         },
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
       ),
     );
   }

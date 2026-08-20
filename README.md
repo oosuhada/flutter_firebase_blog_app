@@ -8,9 +8,9 @@ An early Flutter + Firebase blog project for practicing post lists, writing flow
 
 ![Flutter Firebase blog interface](.github/assets/ui-preview.png)
 
-현재 저장소의 Firebase 설정을 포함한 Flutter Web release build를 실제 렌더링해 캡처했습니다. 데이터가 없는 초기 상태에서도 `BLOG` 화면과 최근 글 영역, 글쓰기 action을 확인할 수 있습니다.
+현재 이미지는 Android Emulator에서 기본 앱을 실행해 최근 글 카드와 글쓰기 action이 함께 보이는 상태를 캡처한 것입니다. Firestore에 데이터가 없거나 연결할 수 없는 경우에는 **명시적인 portfolio sample posts**를 표시해 UI가 빈 화면이 되지 않도록 했습니다.
 
-The screenshot is rendered from the current Flutter Web release build. Even with an empty data state, it shows the main blog surface and write-post affordance.
+The screenshot is captured from the default app on an Android Emulator. When Firestore is empty or unavailable, the app explicitly shows portfolio sample posts instead of presenting a blank list.
 
 ## Features / 주요 구현
 
@@ -19,6 +19,7 @@ The screenshot is rendered from the current Flutter Web release build. Even with
 - Firebase Storage를 사용한 이미지 업로드 경로
 - Riverpod을 사용한 상태 관리
 - 최근 글 목록 화면
+- Firebase empty/error 상태에서 명시적으로 표시되는 portfolio sample fallback
 - 새 글 작성 및 기존 글 편집을 고려한 write page
 - Flutter theme/app-bar styling 연습
 
@@ -48,9 +49,11 @@ Firebase-backed operations require a valid Firebase project/configuration. Do no
 ## Validate / 검증
 
 ```bash
-flutter build web --release
+flutter analyze
+flutter test
+flutter run
 ```
 
-2026-08-20 기준 의존성 설치와 Flutter Web release build를 다시 통과했습니다. 이 프로젝트는 Firebase CRUD와 Flutter 상태 관리의 기초를 익힌 학습 기록으로 유지합니다.
+2026-08-20 기준 dependency resolution, static analysis, widget test, Android Emulator build/run을 다시 검증했습니다. 이 프로젝트는 Firebase CRUD와 Flutter 상태 관리의 기초를 익힌 학습 기록으로 유지합니다.
 
-As of 2026-08-20, dependency resolution and the Flutter Web release build pass again. This repository is preserved as an early learning artifact for Firebase CRUD and Flutter state management.
+As of 2026-08-20, dependency resolution, static analysis, widget tests, and Android Emulator build/run were re-validated. This repository is preserved as an early learning artifact for Firebase CRUD and Flutter state management.

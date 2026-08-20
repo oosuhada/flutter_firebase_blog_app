@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/data/repository/post_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class DetailViewModel extends AutoDisposeFamilyNotifier<Post?, Post> {
     );
     ref.onDispose(
       () {
-        print("DISPOSE 됨");
+        debugPrint('DISPOSE 됨');
         streamSubscription.cancel();
       },
     );
