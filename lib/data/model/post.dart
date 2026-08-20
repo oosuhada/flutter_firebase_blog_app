@@ -31,6 +31,6 @@ class Post {
         'title': title,
         'content': content,
         'createdAt': createdAt.toIso8601String(),
-        imgUrl: imgUrl,
+        'imgUrl': imgUrl,
       };
 }

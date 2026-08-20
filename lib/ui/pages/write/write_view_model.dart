@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/data/repository/post_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,17 +34,19 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
     required String title,
     required String content,
   }) async {
-    print('WriteViewModel: insert 메서드 시작');
+    debugPrint('WriteViewModel: insert 메서드 시작');
 
     if (state.imageUrl == null) {
-      print('WriteViewModel: 이미지 URL이 없습니다.');
+      debugPrint('WriteViewModel: 이미지 URL이 없습니다.');
       return false;
     }
 
     state = WritePageState(true, state.imageUrl);
 
     try {
-      print('WriteViewModel: ${arg == null ? "새 포스트 작성" : "포스트 수정"} 시작');
+      debugPrint(
+        'WriteViewModel: ${arg == null ? "새 포스트 작성" : "포스트 수정"} 시작',
+      );
       final result = arg == null
           ? await postRepository.insert(
               writer: writer,
@@ -59,14 +62,14 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
               imgUrl: state.imageUrl!,
             );
 
-      print('WriteViewModel: 작업 결과 - $result');
+      debugPrint('WriteViewModel: 작업 결과 - $result');
       return result;
     } catch (e) {
-      print('WriteViewModel: 에러 발생 - $e');
+      debugPrint('WriteViewModel: 에러 발생 - $e');
       return false;
     } finally {
       state = WritePageState(false, state.imageUrl);
-      print('WriteViewModel: insert 메서드 종료');
+      debugPrint('WriteViewModel: insert 메서드 종료');
     }
   }
 
@@ -87,7 +90,7 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
       final url = await imageRef.getDownloadURL();
       state = WritePageState(false, url);
     } catch (e) {
-      print(e);
+      debugPrint('$e');
     }
   }
 }

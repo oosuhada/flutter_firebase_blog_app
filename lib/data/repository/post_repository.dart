@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 
 class PostRepository {
@@ -34,13 +35,13 @@ class PostRepository {
     required String writer,
     required String imgUrl,
   }) async {
-    print('PostRepository: insert 시작');
+    debugPrint('PostRepository: insert 시작');
     try {
       if (title.trim().isEmpty ||
           content.trim().isEmpty ||
           writer.trim().isEmpty ||
           imgUrl.trim().isEmpty) {
-        print('PostRepository: 유효하지 않은 입력 데이터');
+        debugPrint('PostRepository: 유효하지 않은 입력 데이터');
         return false;
       }
 
@@ -56,12 +57,12 @@ class PostRepository {
         'imgUrl': imgUrl,
       };
 
-      print('PostRepository: Firestore에 데이터 삽입 시도');
+      debugPrint('PostRepository: Firestore에 데이터 삽입 시도');
       docRef.set(map);
-      print('PostRepository: insert 완료');
+      debugPrint('PostRepository: insert 완료');
       return true;
     } catch (e) {
-      print('PostRepository: insert 에러 - $e');
+      debugPrint('PostRepository: insert 에러 - $e');
       return false;
     }
   }
@@ -77,7 +78,7 @@ class PostRepository {
         ...snapshot.data()!,
       });
     } catch (e) {
-      print(e);
+      debugPrint('$e');
       return null;
     }
   }
@@ -88,7 +89,7 @@ class PostRepository {
       docRef.delete();
       return true;
     } catch (e) {
-      print('$e');
+      debugPrint('$e');
       return false;
     }
   }
@@ -100,14 +101,14 @@ class PostRepository {
     required String content,
     required String imgUrl,
   }) async {
-    print('PostRepository: update 시작');
+    debugPrint('PostRepository: update 시작');
     try {
       if (id.trim().isEmpty ||
           title.trim().isEmpty ||
           content.trim().isEmpty ||
           writer.trim().isEmpty ||
           imgUrl.trim().isEmpty) {
-        print('PostRepository: 유효하지 않은 입력 데이터');
+        debugPrint('PostRepository: 유효하지 않은 입력 데이터');
         return false;
       }
 
@@ -118,10 +119,10 @@ class PostRepository {
         'content': content,
         'imgUrl': imgUrl,
       });
-      print('PostRepository: update 완료');
+      debugPrint('PostRepository: update 완료');
       return true;
     } catch (e) {
-      print('PostRepository: update 에러 - $e');
+      debugPrint('PostRepository: update 에러 - $e');
       return false;
     }
   }
