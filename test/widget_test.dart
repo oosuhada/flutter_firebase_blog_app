@@ -20,6 +20,9 @@ void main() {
     expect(find.text('Preview'), findsOneWidget);
     expect(find.text('Designing a calmer Flutter feed'), findsOneWidget);
     expect(find.text('Flutter UI'), findsWidgets);
+    expect(
+        portfolioSamplePosts.every((post) => post.imgUrl.startsWith('asset:')),
+        isTrue);
   });
 
   testWidgets('sample post opens a complete detail experience', (tester) async {
