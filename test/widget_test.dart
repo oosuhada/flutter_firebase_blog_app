@@ -7,9 +7,10 @@ void main() {
     await tester.pumpWidget(const ProviderScope(child: MyApp()));
     await tester.pump();
 
-    expect(find.text('BLOG'), findsOneWidget);
+    expect(find.text('DEV JOURNAL'), findsOneWidget);
     expect(find.text('최근 글'), findsOneWidget);
-    expect(find.text('Portfolio preview · sample posts'), findsOneWidget);
+    expect(find.text('Preview data'), findsOneWidget);
+    expect(find.text('Build notes, shipped in Flutter'), findsOneWidget);
     expect(find.text('Flutter와 Firebase로 글 목록 만들기'), findsOneWidget);
   });
 }
