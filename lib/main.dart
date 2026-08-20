@@ -21,19 +21,46 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF7F6F2),
         colorScheme: ColorScheme.fromSeed(
-          // 앱 전체 색상 purple
-          seedColor: Colors.purple,
-          // 앱 테마 라이트. light 속성은 라이트 테마를 정의하는 곳이니!
+          seedColor: const Color(0xFF3559E0),
           brightness: Brightness.light,
+          surface: const Color(0xFFFDFCF9),
         ),
-        // 앱 전체적으로 앱바의 폰트 스타일이 동일하니 appBarTheme 속성 정의해서 사용!
-        appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF7F6F2),
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: false,
+        ),
+        cardTheme: CardTheme(
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: const Color(0xFFFDFCF9),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: BorderSide(color: Colors.black.withValues(alpha: .06)),
           ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFFDFCF9),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(color: Colors.black.withValues(alpha: .06)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(color: Color(0xFF3559E0), width: 1.5),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         ),
       ),
       home: const HomePage(),

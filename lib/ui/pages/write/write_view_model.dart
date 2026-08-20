@@ -33,6 +33,7 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
     required String writer,
     required String title,
     required String content,
+    required String category,
   }) async {
     debugPrint('WriteViewModel: insert 메서드 시작');
 
@@ -53,6 +54,7 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
               title: title,
               content: content,
               imgUrl: state.imageUrl!,
+              category: category,
             )
           : await postRepository.update(
               id: arg!.id,
@@ -60,6 +62,7 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
               title: title,
               content: content,
               imgUrl: state.imageUrl!,
+              category: category,
             );
 
       debugPrint('WriteViewModel: 작업 결과 - $result');
@@ -74,6 +77,7 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
   }
 
   Future<void> uploadImage(XFile xFile) async {
+    state = WritePageState(true, state.imageUrl);
     try {
       // FirebaseStorage 객체 가지고오기
       FirebaseStorage storage = FirebaseStorage.instance;
@@ -88,9 +92,11 @@ class WriteViewModel extends AutoDisposeFamilyNotifier<WritePageState, Post?> {
       await imageRef.putFile(File(xFile.path));
       // 만들어진 파일의 url 가져오기
       final url = await imageRef.getDownloadURL();
-      state = WritePageState(false, url);
+      state = WritePageState(true, url);
     } catch (e) {
       debugPrint('$e');
+    } finally {
+      state = WritePageState(false, state.imageUrl);
     }
   }
 }

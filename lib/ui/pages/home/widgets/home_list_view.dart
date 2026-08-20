@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/detail/detail_page.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/home/home_view_model.dart';
+import 'package:flutter_firebase_blog_app/ui/widgets/post_cover.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeListView extends ConsumerWidget {
@@ -11,50 +12,52 @@ class HomeListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(homeViewModel);
 
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-            child: Row(
-              children: [
-                Text(
-                  '최근 글',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                ),
-                const Spacer(),
-                if (state.isSample)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      'Preview data',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'RECENT POSTS',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          letterSpacing: 1.5,
+                          fontWeight: FontWeight.w800,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 104),
-              itemCount: state.posts.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, index) => _PostCard(
-                post: state.posts[index],
-                isSample: state.isSample,
+                  const SizedBox(height: 6),
+                  Text(
+                    'Fresh from the build log',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -.6,
+                        ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
+            Text(
+              '${state.posts.length} notes',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Colors.black45),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        ...state.posts.indexed.expand(
+          (entry) => [
+            _PostCard(post: entry.$2, isSample: state.isSample),
+            if (entry.$1 != state.posts.length - 1) const SizedBox(height: 14),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -71,62 +74,95 @@ class _PostCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.zero,
       child: InkWell(
-        onTap: isSample
-            ? null
-            : () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => DetailPage(post)),
-                );
-              },
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DetailPage(post, previewMode: isSample),
+            ),
+          );
+        },
         child: SizedBox(
-          height: 156,
+          height: 176,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                width: 136,
-                height: double.infinity,
-                child: _PostImage(post: post),
+                width: 122,
+                child: PostCover(post: post, compact: true),
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 14, 14),
+                  padding: const EdgeInsets.fromLTRB(16, 15, 14, 14),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primaryContainer
+                              .withValues(alpha: .7),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          post.category,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       Text(
                         post.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1.16,
                                 ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 7),
                       Text(
                         post.content,
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurfaceVariant,
+                              height: 1.35,
                             ),
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
-                          const Icon(Icons.person_outline, size: 14),
-                          const SizedBox(width: 4),
+                          CircleAvatar(
+                            radius: 9,
+                            backgroundColor:
+                                Colors.black.withValues(alpha: .07),
+                            child: const Icon(Icons.person_outline_rounded,
+                                size: 11),
+                          ),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               '${post.writer} · ${_date(post.createdAt)}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.labelSmall,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(color: Colors.black54),
                             ),
                           ),
+                          const Icon(Icons.arrow_forward_rounded,
+                              size: 15, color: Colors.black38),
                         ],
                       ),
                     ],
@@ -143,44 +179,5 @@ class _PostCard extends StatelessWidget {
   String _date(DateTime time) {
     String two(int value) => value.toString().padLeft(2, '0');
     return '${time.year}.${two(time.month)}.${two(time.day)}';
-  }
-}
-
-class _PostImage extends StatelessWidget {
-  const _PostImage({required this.post});
-
-  final Post post;
-
-  @override
-  Widget build(BuildContext context) {
-    if (post.imgUrl.trim().isNotEmpty) {
-      return Image.network(
-        post.imgUrl,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const _ImagePlaceholder(),
-      );
-    }
-
-    return const _ImagePlaceholder();
-  }
-}
-
-class _ImagePlaceholder extends StatelessWidget {
-  const _ImagePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-      ),
-      child: Center(
-        child: Icon(
-          Icons.article_outlined,
-          size: 42,
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-      ),
-    );
   }
 }
