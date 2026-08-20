@@ -76,13 +76,3 @@ flutter run -d emulator-5554
 The repository contains the generated Firebase client configuration used by the app. Live writes require the configured Firebase project to have the necessary Firestore and Storage services and permissions available. If live data is unavailable, the local portfolio preview remains usable.
 
 레포지토리에는 앱에서 사용하는 생성된 Firebase client 설정이 포함되어 있습니다. 실제 쓰기 기능을 사용하려면 연결된 Firebase 프로젝트에서 Firestore/Storage 서비스와 권한이 활성화되어 있어야 합니다. live data를 사용할 수 없는 경우에도 local portfolio preview는 정상적으로 확인할 수 있습니다.
-
-## Validation / 검증
-
-Final validation performed during the portfolio pass / 포트폴리오 마무리 과정에서 실제 수행한 검증:
-
-- `flutter analyze` — **0 issues**
-- `flutter test` — **4 tests passed / 4개 테스트 통과**
-- `flutter build apk --debug` — **successful / 성공**
-- Android Emulator — feed, detail, editor, and cover-gallery states captured at **1080 × 2400** / Android Emulator에서 feed, detail, editor, cover-gallery 대표 화면을 **1080 × 2400**으로 캡처했습니다.
-- Final screenshot pass — no RenderFlex overflow or broken local cover image errors observed / 최종 screenshot 검수에서 RenderFlex overflow와 깨진 local cover image 오류가 확인되지 않았습니다.
