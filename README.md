@@ -1,74 +1,76 @@
 # Dev Journal — Flutter + Firebase
 
-A compact mobile developer journal built with Flutter, Riverpod, Firestore, and Firebase Storage. The project keeps the original Firebase CRUD path, but presents it as a small Android-first blog product rather than an empty learning demo.
+An Android-first mobile developer journal built with Flutter, Riverpod, Firestore, and Firebase Storage. It keeps the original Firebase CRUD flow intact while presenting the project as a compact blog product with a meaningful offline-friendly portfolio preview.
 
-## Android Emulator preview
+## Preview
 
-| Feed | Post detail | Write post |
-| --- | --- | --- |
-| ![Dev Journal feed](.github/assets/portfolio/01-feed.png) | ![Post detail](.github/assets/portfolio/02-post-detail.png) | ![Write post](.github/assets/portfolio/03-write-post.png) |
+<p align="center">
+  <img src=".github/assets/portfolio/01-feed.png" alt="Dev Journal feed" width="31%" />
+  <img src=".github/assets/portfolio/02-post-detail.png" alt="Post detail" width="31%" />
+  <img src=".github/assets/portfolio/03-write-post.png" alt="Write and edit post" width="31%" />
+</p>
 
-All three bundled covers visible together:
+<p align="center"><sub>Feed · Post detail · Write / edit flow</sub></p>
 
-![Three local development-photo covers](.github/assets/portfolio/04-image-preview.png)
+<p align="center">
+  <img src=".github/assets/portfolio/04-image-preview.png" alt="Bundled development-photo covers" width="31%" />
+</p>
 
-The screenshots are captured from an Android Emulator. When Firestore is empty or unavailable, the app enters an explicit **portfolio preview mode** with local sample content and bundled development-photo covers, so the UI stays meaningful without depending on runtime network images or private Firebase credentials.
+<p align="center"><sub>Bundled local cover photography used by the portfolio sample posts</sub></p>
 
-## Product experience
+## What it does
 
-- **Dev Journal identity** — editorial hero, recent posts, topic chips, and a clear writing CTA.
-- **Visual post cards** — category, title, excerpt, author, date, and bundled local cover photography for every portfolio sample.
-- **Readable detail view** — large cover, metadata, reading time, article typography, and contextual edit/delete actions.
-- **Mobile-first editor** — cover picker, live visual preview, title/body/category/author fields, and publish/update actions inside one keyboard-safe scroll surface.
-- **Preview vs live data** — sample data lives in `lib/data/sample/`; the Firestore repository remains the live source of truth whenever documents are available.
-- **Firebase-safe Android config** — the Android `applicationId`/`namespace` match an Android client in `google-services.json`, with a regression test guarding the relationship.
+- Presents recent developer notes with category, title, excerpt, author, date, and cover imagery.
+- Opens each entry into a readable article view with a large hero image and metadata.
+- Supports create/update flows with cover selection, preview, title, body, category, author, and publish actions.
+- Uses bundled local development-photo covers for portfolio sample posts, avoiding runtime image-network dependency.
+- Falls back to explicit sample content when Firestore is empty or unavailable, while keeping the live Firebase path separate.
+- Uses Firebase Storage for live cover uploads and Firestore for live post persistence.
 
-## Data modes
+## Architecture
 
-### Portfolio preview
-
-`HomeViewModel` starts with `portfolioSamplePosts`. If Firestore is unavailable or has no posts, that explicit preview stays visible. Sample detail and editor flows remain local and do not write mock content into Firebase.
-
-### Live Firebase
-
-When the `posts` Firestore stream returns data, the feed switches to live mode. Create/update operations upload the chosen cover to Firebase Storage and then write the post document to Firestore. Delete operations remove the live Firestore document.
-
-Existing post documents without a `category` field remain readable and fall back to `Development`.
-
-## Project structure
+The UI is organized around Riverpod view models and a repository boundary:
 
 ```text
-lib/
-├── data/
-│   ├── model/post.dart
-│   ├── repository/post_repository.dart
-│   └── sample/sample_posts.dart
-├── ui/
-│   ├── pages/home/
-│   ├── pages/detail/
-│   ├── pages/write/
-│   └── widgets/post_cover.dart
-├── firebase_options.dart
-└── main.dart
+Flutter UI
+   ↓
+Riverpod ViewModels
+   ↓
+PostRepository
+   ├── Cloud Firestore
+   └── Firebase Storage
+
+Portfolio fallback
+   └── lib/data/sample/sample_posts.dart
 ```
 
-`assets/images/posts/` contains the bundled preview covers used by the sample journal entries.
+Sample content is presentation fallback only. When Firestore returns posts, the feed switches to live data; sample edit flows do not write mock content into Firebase.
 
-## Run on Android
+## Tech Stack
+
+- Flutter / Dart
+- Riverpod
+- Firebase Core
+- Cloud Firestore
+- Firebase Storage
+- Image Picker
+- Android Emulator
+
+## Run
 
 ```bash
 flutter pub get
 flutter run -d emulator-5554
 ```
 
-Real Firebase writes require a valid project configuration and permissions. Portfolio preview does not require live Firestore documents or reachable image URLs.
+The repository contains the generated Firebase client configuration used by the app. Live writes additionally require the configured Firebase project to have the necessary Firestore/Storage services and permissions available. If live data is unavailable, the app remains reviewable through its local portfolio preview mode.
 
 ## Validation
 
-```bash
-flutter analyze
-flutter test
-flutter build apk --debug
-```
+Final validation performed during the portfolio pass:
 
-The widget suite covers the preview feed, sample detail rendering, compact-screen editor layout, and the Android package/Firebase client match.
+- `flutter analyze` — **0 issues**
+- `flutter test` — **4 tests passed**
+- `flutter build apk --debug` — **successful**
+- Android Emulator — representative feed, detail, editor, and cover-gallery states captured at **1080 × 2400**
+- Final screenshot pass — no RenderFlex overflow or broken local cover image errors observed
