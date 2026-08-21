@@ -148,32 +148,39 @@ class _WritePageState extends ConsumerState<WritePage> {
               const SizedBox(height: 26),
               _SectionLabel(label: 'STORY'),
               const SizedBox(height: 10),
-              TextFormField(
-                controller: titleController,
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.sentences,
-                onChanged: (_) => setState(() {}),
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  hintText: 'What did you learn or ship?',
+              _GlassFormSection(
+                surfaceOpacity: .74,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: titleController,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.sentences,
+                      onChanged: (_) => setState(() {}),
+                      decoration: const InputDecoration(
+                        labelText: 'Title',
+                        hintText: 'What did you learn or ship?',
+                      ),
+                      validator: _required('Add a title'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: contentController,
+                      minLines: 8,
+                      maxLines: 16,
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: const InputDecoration(
+                        labelText: 'Body',
+                        alignLabelWithHint: true,
+                        hintText:
+                            'Context, decisions, tradeoffs, and what you would do next…',
+                      ),
+                      validator: _required('Write a few notes first'),
+                    ),
+                  ],
                 ),
-                validator: _required('Add a title'),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: contentController,
-                minLines: 8,
-                maxLines: 16,
-                textInputAction: TextInputAction.newline,
-                keyboardType: TextInputType.multiline,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(
-                  labelText: 'Body',
-                  alignLabelWithHint: true,
-                  hintText:
-                      'Context, decisions, tradeoffs, and what you would do next…',
-                ),
-                validator: _required('Write a few notes first'),
               ),
               const SizedBox(height: 26),
               _SectionLabel(label: 'PUBLISHING DETAILS'),
@@ -253,7 +260,11 @@ class _WritePageState extends ConsumerState<WritePage> {
           : titleController.text.trim(),
       content: contentController.text,
       createdAt: widget.post?.createdAt ?? DateTime.now(),
-      imgUrl: imageUrl ?? '',
+      imgUrl: (imageUrl?.trim().isNotEmpty ?? false)
+          ? imageUrl!
+          : widget.previewMode
+              ? 'asset:assets/images/posts/writing-flow.jpg'
+              : '',
       category: selectedCategory,
     );
   }
@@ -339,7 +350,11 @@ class _CoverPreview extends StatelessWidget {
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => PostCover(post: post),
               )
-            : PostCover(post: post, imageUrlOverride: imageUrl),
+            : PostCover(
+                post: post,
+                imageUrlOverride:
+                    (imageUrl?.trim().isNotEmpty ?? false) ? imageUrl : null,
+              ),
       ),
     );
   }
@@ -363,15 +378,20 @@ class _SectionLabel extends StatelessWidget {
 }
 
 class _GlassFormSection extends StatelessWidget {
-  const _GlassFormSection({required this.child});
+  const _GlassFormSection({
+    required this.child,
+    this.surfaceOpacity = .68,
+  });
 
   final Widget child;
+  final double surfaceOpacity;
 
   @override
   Widget build(BuildContext context) {
     return AppGlassSurface(
       borderRadius: BorderRadius.circular(24),
-      blurSigma: 12,
+      blurSigma: 16,
+      surfaceOpacity: surfaceOpacity,
       padding: const EdgeInsets.all(12),
       child: child,
     );
