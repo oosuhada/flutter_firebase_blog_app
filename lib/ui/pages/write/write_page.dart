@@ -44,8 +44,16 @@ class _WritePageState extends ConsumerState<WritePage> {
     super.initState();
     writerController =
         TextEditingController(text: widget.post?.writer ?? 'oosuhada');
-    titleController = TextEditingController(text: widget.post?.title ?? '');
-    contentController = TextEditingController(text: widget.post?.content ?? '');
+    titleController = TextEditingController(
+      text: widget.post?.title ??
+          (widget.previewMode ? 'Refining liquid glass writing surfaces' : ''),
+    );
+    contentController = TextEditingController(
+      text: widget.post?.content ??
+          (widget.previewMode
+              ? 'A focused pass on title and body surfaces: each field now owns its own translucent layer, backdrop blur, edge highlight, and readable foreground contrast.\n\nThe cover stays photographic while the writing controls form a clear glass hierarchy around it.'
+              : ''),
+    );
     final initialCategory = widget.post?.category ?? categories.first;
     selectedCategory = categories.contains(initialCategory)
         ? initialCategory
@@ -148,38 +156,50 @@ class _WritePageState extends ConsumerState<WritePage> {
               const SizedBox(height: 26),
               _SectionLabel(label: 'STORY'),
               const SizedBox(height: 10),
-              _GlassFormSection(
-                surfaceOpacity: .74,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: titleController,
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
-                      onChanged: (_) => setState(() {}),
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
-                        hintText: 'What did you learn or ship?',
-                      ),
-                      validator: _required('Add a title'),
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: contentController,
-                      minLines: 8,
-                      maxLines: 16,
-                      textInputAction: TextInputAction.newline,
-                      keyboardType: TextInputType.multiline,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: const InputDecoration(
-                        labelText: 'Body',
-                        alignLabelWithHint: true,
-                        hintText:
-                            'Context, decisions, tradeoffs, and what you would do next…',
-                      ),
-                      validator: _required('Write a few notes first'),
-                    ),
-                  ],
+              _GlassWritingField(
+                label: 'Title',
+                child: TextFormField(
+                  controller: titleController,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.sentences,
+                  onChanged: (_) => setState(() {}),
+                  decoration: const InputDecoration(
+                    hintText: 'What did you learn or ship?',
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    height: 1.3,
+                  ),
+                  validator: _required('Add a title'),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _GlassWritingField(
+                label: 'Body',
+                child: TextFormField(
+                  controller: contentController,
+                  minLines: 8,
+                  maxLines: 16,
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    hintText:
+                        'Context, decisions, tradeoffs, and what you would do next…',
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  style: const TextStyle(fontSize: 15, height: 1.55),
+                  validator: _required('Write a few notes first'),
                 ),
               ),
               const SizedBox(height: 26),
@@ -378,22 +398,82 @@ class _SectionLabel extends StatelessWidget {
 }
 
 class _GlassFormSection extends StatelessWidget {
-  const _GlassFormSection({
-    required this.child,
-    this.surfaceOpacity = .68,
-  });
+  const _GlassFormSection({required this.child});
 
   final Widget child;
-  final double surfaceOpacity;
 
   @override
   Widget build(BuildContext context) {
     return AppGlassSurface(
       borderRadius: BorderRadius.circular(24),
       blurSigma: 16,
-      surfaceOpacity: surfaceOpacity,
+      surfaceOpacity: .68,
       padding: const EdgeInsets.all(12),
       child: child,
+    );
+  }
+}
+
+class _GlassWritingField extends StatefulWidget {
+  const _GlassWritingField({
+    required this.label,
+    required this.child,
+  });
+
+  final String label;
+  final Widget child;
+
+  @override
+  State<_GlassWritingField> createState() => _GlassWritingFieldState();
+}
+
+class _GlassWritingFieldState extends State<_GlassWritingField> {
+  bool _focused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Focus(
+      onFocusChange: (focused) {
+        if (_focused != focused) setState(() => _focused = focused);
+      },
+      child: AppGlassSurface(
+        tint: _focused ? scheme.primaryContainer : const Color(0xFFF8F8FE),
+        surfaceOpacity: _focused ? .76 : .66,
+        blurSigma: 20,
+        borderRadius: BorderRadius.circular(22),
+        padding: const EdgeInsets.fromLTRB(16, 13, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 7,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    color: _focused
+                        ? scheme.primary
+                        : scheme.primary.withValues(alpha: .5),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  widget.label,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: scheme.primary,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.25,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            widget.child,
+          ],
+        ),
+      ),
     );
   }
 }
