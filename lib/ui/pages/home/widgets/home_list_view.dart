@@ -118,23 +118,10 @@ class _PostCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withValues(alpha: .7),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          post.category,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
+                      AppGlassTag(
+                        label: post.category,
+                        tint: Theme.of(context).colorScheme.primaryContainer,
+                        surfaceOpacity: .58,
                       ),
                       const SizedBox(height: 8),
                       Text(
