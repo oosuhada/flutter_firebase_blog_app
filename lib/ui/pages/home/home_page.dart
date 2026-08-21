@@ -226,7 +226,7 @@ class _DarkTag extends StatelessWidget {
       label: label,
       tint: Colors.white,
       foregroundColor: Colors.white,
-      surfaceOpacity: .14,
+      surfaceOpacity: .30,
     );
   }
 }
