@@ -20,9 +20,14 @@ class HomePage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
-                child: AppGlassAction(
-                    onTap: () {},
-                    child: _DataModeBadge(isSample: state.isSample))),
+              child: AppGlassSurface(
+                semanticLabel:
+                    state.isSample ? 'Preview data mode' : 'Live data mode',
+                borderRadius: BorderRadius.circular(999),
+                blurSigma: 14,
+                child: _DataModeBadge(isSample: state.isSample),
+              ),
+            ),
           ),
         ],
       ),
@@ -131,7 +136,6 @@ class _HeroIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -182,17 +186,11 @@ class _HeroIntro extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: AppGlassAction(
-                  onTap: onWrite,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add_rounded, size: 19, color: scheme.primary),
-                      const SizedBox(width: 8),
-                      const Text('Start a note',
-                          style: TextStyle(fontWeight: FontWeight.w800)),
-                    ],
-                  ),
+                child: AppGlassActionButton(
+                  icon: Icons.add_rounded,
+                  onPressed: onWrite,
+                  label: 'Start a note',
+                  semanticLabel: 'Start a new developer note',
                 ),
               ),
               if (isSample) ...[
