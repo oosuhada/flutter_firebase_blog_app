@@ -38,7 +38,7 @@ class V2GlassTheme {
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: Colors.white.withValues(alpha: .88),
+        backgroundColor: Colors.white.withValues(alpha: .46),
         foregroundColor: ink,
         elevation: 0,
         focusElevation: 0,
@@ -48,7 +48,7 @@ class V2GlassTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withValues(alpha: .82),
+        fillColor: Colors.white.withValues(alpha: .48),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -137,12 +137,16 @@ class AppGlassSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final media = MediaQuery.maybeOf(context);
     final highContrast = media?.highContrast ?? false;
-    final dark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
     final baseTint = tint ?? (dark ? const Color(0xFF25262B) : Colors.white);
-    final alpha = highContrast ? (dark ? .94 : .96) : (dark ? .60 : .66);
+    final accentTint = Color.lerp(baseTint, theme.colorScheme.primary, dark ? .16 : .10)!;
+    final topAlpha = highContrast ? (dark ? .96 : .98) : (dark ? .60 : .48);
+    final middleAlpha = highContrast ? (dark ? .94 : .96) : (dark ? .50 : .36);
+    final bottomAlpha = highContrast ? (dark ? .92 : .94) : (dark ? .42 : .28);
     final edge = dark
-        ? Colors.white.withValues(alpha: highContrast ? .28 : .18)
-        : Colors.white.withValues(alpha: .86);
+        ? Colors.white.withValues(alpha: highContrast ? .32 : .28)
+        : Colors.white.withValues(alpha: highContrast ? .96 : .78);
 
     Widget content = Padding(padding: padding, child: child);
     if (onTap != null) {
@@ -156,37 +160,80 @@ class AppGlassSurface extends StatelessWidget {
       );
     }
 
-    final decorated = DecoratedBox(
+    final body = Stack(
+      fit: StackFit.passthrough,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: const [0, .48, 1],
+              colors: [
+                baseTint.withValues(alpha: topAlpha),
+                accentTint.withValues(alpha: middleAlpha),
+                baseTint.withValues(alpha: bottomAlpha),
+              ],
+            ),
+            border: Border.all(color: edge, width: 1),
+          ),
+          child: content,
+        ),
+        Positioned.fill(
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.center,
+                  stops: const [0, .24, .62],
+                  colors: [
+                    Colors.white.withValues(alpha: dark ? .16 : .36),
+                    Colors.white.withValues(alpha: dark ? .05 : .11),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    final clipped = ClipRRect(
+      borderRadius: borderRadius,
+      child: highContrast || blurSigma <= 0
+          ? body
+          : BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: blurSigma + 4,
+                sigmaY: blurSigma + 4,
+              ),
+              child: body,
+            ),
+    );
+
+    final glass = DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: borderRadius,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            baseTint.withValues(alpha: alpha + (dark ? .05 : .12)),
-            baseTint.withValues(alpha: alpha),
-          ],
-        ),
-        border: Border.all(color: edge, width: .8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: dark ? .22 : .09),
-            blurRadius: 26,
-            offset: const Offset(0, 12),
+            color: Colors.black.withValues(alpha: dark ? .28 : .13),
+            blurRadius: 32,
+            spreadRadius: -4,
+            offset: const Offset(0, 14),
+          ),
+          BoxShadow(
+            color: Colors.white.withValues(alpha: dark ? .04 : .20),
+            blurRadius: 10,
+            spreadRadius: -5,
+            offset: const Offset(-4, -4),
           ),
         ],
       ),
-      child: content,
-    );
-
-    final glass = ClipRRect(
-      borderRadius: borderRadius,
-      child: highContrast || blurSigma <= 0
-          ? decorated
-          : BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-              child: decorated,
-            ),
+      child: clipped,
     );
 
     if (semanticLabel == null) return glass;
