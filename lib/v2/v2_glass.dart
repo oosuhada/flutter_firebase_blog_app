@@ -396,6 +396,89 @@ class AppGlassActionButton extends StatelessWidget {
   }
 }
 
+class AppGlassTag extends StatelessWidget {
+  const AppGlassTag({
+    super.key,
+    required this.label,
+    this.tint,
+    this.foregroundColor,
+    this.surfaceOpacity = .52,
+  });
+
+  final String label;
+  final Color? tint;
+  final Color? foregroundColor;
+  final double surfaceOpacity;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppGlassSurface(
+      tint: tint,
+      surfaceOpacity: surfaceOpacity,
+      blurSigma: 14,
+      borderRadius: BorderRadius.circular(15),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: foregroundColor ?? Theme.of(context).colorScheme.onSurface,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
+class AppGlassPrimaryButton extends StatelessWidget {
+  const AppGlassPrimaryButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.tint,
+    this.foregroundColor,
+    this.minHeight = 52,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final Color? tint;
+  final Color? foregroundColor;
+  final double minHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final enabled = onPressed != null;
+    final foreground = foregroundColor ?? Colors.white;
+    return Opacity(
+      opacity: enabled ? 1 : .44,
+      child: SizedBox(
+        width: double.infinity,
+        height: minHeight,
+        child: AppGlassSurface(
+          onTap: onPressed,
+          semanticLabel: label,
+          tint: tint ?? scheme.primary,
+          surfaceOpacity: .74,
+          blurSigma: 20,
+          borderRadius: BorderRadius.circular(17),
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: foreground,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class AppGlassSearchButton extends StatelessWidget {
   const AppGlassSearchButton(
       {super.key, required this.hint, required this.onTap, this.trailing});

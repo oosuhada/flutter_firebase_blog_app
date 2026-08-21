@@ -158,19 +158,10 @@ class _CategoryPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: Theme.of(context)
-            .textTheme
-            .labelSmall
-            ?.copyWith(fontWeight: FontWeight.w800),
-      ),
+    return AppGlassTag(
+      label: label,
+      tint: Theme.of(context).colorScheme.primaryContainer,
+      surfaceOpacity: .58,
     );
   }
 }
@@ -180,19 +171,11 @@ class _PreviewPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: .05),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        'PREVIEW',
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-              letterSpacing: .8,
-            ),
-      ),
+    return const AppGlassTag(
+      label: 'PREVIEW',
+      tint: Colors.white,
+      foregroundColor: Color(0xFF34363B),
+      surfaceOpacity: .52,
     );
   }
 }

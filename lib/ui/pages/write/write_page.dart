@@ -128,27 +128,16 @@ class _WritePageState extends ConsumerState<WritePage> {
                       imageUrl: state.imageUrl,
                     ),
                     const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: state.isWriting ? null : _pickImage,
-                        icon: state.isWriting
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : const Icon(Icons.add_photo_alternate_outlined),
-                        label: Text(
-                          state.isWriting
-                              ? 'Uploading cover…'
-                              : localImagePath == null &&
-                                      (state.imageUrl?.isEmpty ?? true)
-                                  ? 'Choose cover image'
-                                  : 'Replace cover image',
-                        ),
-                      ),
+                    AppGlassPrimaryButton(
+                      onPressed: state.isWriting ? null : _pickImage,
+                      label: state.isWriting
+                          ? 'Uploading cover…'
+                          : localImagePath == null &&
+                                  (state.imageUrl?.isEmpty ?? true)
+                              ? 'Choose cover image'
+                              : 'Replace cover image',
+                      tint: Theme.of(context).colorScheme.primaryContainer,
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                   ],
                 ),
@@ -205,47 +194,61 @@ class _WritePageState extends ConsumerState<WritePage> {
               const SizedBox(height: 26),
               _SectionLabel(label: 'PUBLISHING DETAILS'),
               const SizedBox(height: 10),
-              _GlassFormSection(
-                child: Column(
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: selectedCategory,
-                      decoration: const InputDecoration(labelText: 'Category'),
-                      items: categories
-                          .map(
-                            (category) => DropdownMenuItem(
-                              value: category,
-                              child: Text(category),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() => selectedCategory = value);
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: writerController,
-                      textInputAction: TextInputAction.done,
-                      decoration: const InputDecoration(labelText: 'Author'),
-                      validator: _required('Add an author'),
-                    ),
-                  ],
+              _GlassPublishingField(
+                child: DropdownButtonFormField<String>(
+                  value: selectedCategory,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1B1C20),
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Category',
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  items: categories
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => selectedCategory = value);
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+              _GlassPublishingField(
+                child: TextFormField(
+                  controller: writerController,
+                  textInputAction: TextInputAction.done,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1B1C20),
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Author',
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  validator: _required('Add an author'),
                 ),
               ),
               const SizedBox(height: 24),
-              FilledButton.icon(
+              AppGlassPrimaryButton(
                 onPressed:
                     state.isWriting ? null : () => _submit(state.imageUrl),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-                icon: Icon(
-                    isEditing ? Icons.save_outlined : Icons.publish_outlined),
-                label: Text(isEditing ? 'Update post' : 'Publish post'),
+                label: isEditing ? 'Update post' : 'Publish post',
               ),
               const SizedBox(height: 10),
               Text(
@@ -474,6 +477,23 @@ class _GlassWritingFieldState extends State<_GlassWritingField> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _GlassPublishingField extends StatelessWidget {
+  const _GlassPublishingField({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppGlassSurface(
+      borderRadius: BorderRadius.circular(20),
+      blurSigma: 18,
+      surfaceOpacity: .62,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: child,
     );
   }
 }

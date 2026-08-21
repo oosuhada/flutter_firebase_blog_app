@@ -63,20 +63,25 @@ class _BrandMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        SizedBox(
           width: 34,
           height: 34,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
+          child: AppGlassSurface(
+            tint: colors.primary,
+            surfaceOpacity: .76,
+            blurSigma: 16,
             borderRadius: BorderRadius.circular(11),
-          ),
-          child: const Text(
-            'D/',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+            child: const Center(
+              child: Text(
+                'D/',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 10),
@@ -217,15 +222,11 @@ class _DarkTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: .08),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: .08)),
-      ),
-      child: Text(label,
-          style: const TextStyle(color: Colors.white70, fontSize: 12)),
+    return AppGlassTag(
+      label: label,
+      tint: Colors.white,
+      foregroundColor: Colors.white,
+      surfaceOpacity: .14,
     );
   }
 }
