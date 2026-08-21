@@ -3,6 +3,7 @@ import 'package:flutter_firebase_blog_app/ui/pages/home/widgets/home_list_view.d
 import 'package:flutter_firebase_blog_app/ui/pages/home/home_view_model.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/write/write_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_firebase_blog_app/v2/v2_glass.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -18,7 +19,10 @@ class HomePage extends ConsumerWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Center(child: _DataModeBadge(isSample: state.isSample)),
+            child: Center(
+                child: AppGlassAction(
+                    onTap: () {},
+                    child: _DataModeBadge(isSample: state.isSample))),
           ),
         ],
       ),
@@ -178,15 +182,17 @@ class _HeroIntro extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: FilledButton.icon(
-                  onPressed: onWrite,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: scheme.primaryContainer,
-                    foregroundColor: scheme.onPrimaryContainer,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                child: AppGlassAction(
+                  onTap: onWrite,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add_rounded, size: 19, color: scheme.primary),
+                      const SizedBox(width: 8),
+                      const Text('Start a note',
+                          style: TextStyle(fontWeight: FontWeight.w800)),
+                    ],
                   ),
-                  icon: const Icon(Icons.add_rounded, size: 19),
-                  label: const Text('Start a note'),
                 ),
               ),
               if (isSample) ...[
