@@ -9,13 +9,13 @@ Flutter, Riverpod, Firestore, Firebase Storage로 만든 Android 중심의 모�
 | | v1 · learning phase | v2 · renewal |
 | --- | --- | --- |
 | Focus | Feature implementation and Firebase CRUD | Adaptive UI and clearer interaction hierarchy |
-| Controls | Default Material controls | Liquid Glass-inspired toolbar and action controls |
+| Controls | Default Material controls | Liquid Glass-inspired toolbar, action controls, and grouped form surfaces |
 | Accessibility | Basic framework defaults | Semantic labels, readable contrast, minimum tap targets |
 | Motion | Default navigation transitions | Platform-aware transitions with reduced-motion support |
-| Rendering | Styling applied at content level | Translucency limited to compact controls to protect rendering cost |
+| Rendering | Styling applied at content level | Glass-themed surface hierarchy for feed summaries, metadata, and control groups while article/image content stays sharp |
 | Platform | General Flutter behavior | Android-first layout with platform-aware visual conventions |
 
-v1에서는 Flutter와 Firebase 기능을 실제로 연결하고 CRUD를 완성하는 데 집중했습니다. v2에서는 기존 데이터 구조와 앱 정체성을 유지한 채 adaptive UI, interaction hierarchy, accessibility, motion, rendering cost, platform convention을 함께 검토했습니다. 본문과 이미지 같은 콘텐츠 영역은 선명하게 유지하고, 투명 효과는 toolbar와 CTA 같은 제어 영역에만 제한했습니다.
+v1에서는 Flutter와 Firebase 기능을 실제로 연결하고 CRUD를 완성하는 데 집중했습니다. v2에서는 기존 데이터 구조와 앱 정체성을 유지한 채 adaptive UI, interaction hierarchy, accessibility, motion, rendering cost, platform convention을 함께 검토했습니다. 본문과 커버 이미지는 선명하게 유지하면서 feed summary, post metadata, cover action, publishing details 같은 보조 surface에는 강도를 낮춘 adaptive translucent control layer를 적용했습니다.
 
 ## Preview / 미리보기
 

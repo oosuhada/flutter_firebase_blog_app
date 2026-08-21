@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/write/write_view_model.dart';
 import 'package:flutter_firebase_blog_app/ui/widgets/post_cover.dart';
+import 'package:flutter_firebase_blog_app/v2/v2_glass.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -110,28 +111,38 @@ class _WritePageState extends ConsumerState<WritePage> {
               const SizedBox(height: 24),
               _SectionLabel(label: 'COVER'),
               const SizedBox(height: 10),
-              _CoverPreview(
-                post: _draftPost(state.imageUrl),
-                localImagePath: localImagePath,
-                imageUrl: state.imageUrl,
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: state.isWriting ? null : _pickImage,
-                icon: state.isWriting
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.add_photo_alternate_outlined),
-                label: Text(
-                  state.isWriting
-                      ? 'Uploading cover…'
-                      : localImagePath == null &&
-                              (state.imageUrl?.isEmpty ?? true)
-                          ? 'Choose cover image'
-                          : 'Replace cover image',
+              _GlassFormSection(
+                child: Column(
+                  children: [
+                    _CoverPreview(
+                      post: _draftPost(state.imageUrl),
+                      localImagePath: localImagePath,
+                      imageUrl: state.imageUrl,
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: state.isWriting ? null : _pickImage,
+                        icon: state.isWriting
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.add_photo_alternate_outlined),
+                        label: Text(
+                          state.isWriting
+                              ? 'Uploading cover…'
+                              : localImagePath == null &&
+                                      (state.imageUrl?.isEmpty ?? true)
+                                  ? 'Choose cover image'
+                                  : 'Replace cover image',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 26),
@@ -167,29 +178,35 @@ class _WritePageState extends ConsumerState<WritePage> {
               const SizedBox(height: 26),
               _SectionLabel(label: 'PUBLISHING DETAILS'),
               const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: selectedCategory,
-                decoration: const InputDecoration(labelText: 'Category'),
-                items: categories
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => selectedCategory = value);
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: writerController,
-                textInputAction: TextInputAction.done,
-                decoration: const InputDecoration(labelText: 'Author'),
-                validator: _required('Add an author'),
+              _GlassFormSection(
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: selectedCategory,
+                      decoration: const InputDecoration(labelText: 'Category'),
+                      items: categories
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() => selectedCategory = value);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: writerController,
+                      textInputAction: TextInputAction.done,
+                      decoration: const InputDecoration(labelText: 'Author'),
+                      validator: _required('Add an author'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
               FilledButton.icon(
@@ -341,6 +358,22 @@ class _SectionLabel extends StatelessWidget {
             fontWeight: FontWeight.w900,
             letterSpacing: 1.4,
           ),
+    );
+  }
+}
+
+class _GlassFormSection extends StatelessWidget {
+  const _GlassFormSection({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppGlassSurface(
+      borderRadius: BorderRadius.circular(24),
+      blurSigma: 12,
+      padding: const EdgeInsets.all(12),
+      child: child,
     );
   }
 }

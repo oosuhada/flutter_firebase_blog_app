@@ -3,6 +3,7 @@ import 'package:flutter_firebase_blog_app/data/model/post.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/detail/detail_view_model.dart';
 import 'package:flutter_firebase_blog_app/ui/pages/write/write_page.dart';
 import 'package:flutter_firebase_blog_app/ui/widgets/post_cover.dart';
+import 'package:flutter_firebase_blog_app/v2/v2_glass.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailPage extends ConsumerWidget {
@@ -100,13 +101,10 @@ class DetailPage extends ConsumerWidget {
                       ),
                 ),
                 const SizedBox(height: 34),
-                Container(
-                  width: double.infinity,
+                AppGlassSurface(
+                  borderRadius: BorderRadius.circular(20),
+                  blurSigma: 12,
                   padding: const EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: .035),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
                   child: Text(
                     previewMode
                         ? 'Portfolio preview · live posts use the same detail layout with Firestore updates.'
@@ -205,46 +203,51 @@ class _PostMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: Colors.black.withValues(alpha: .06),
-          child: const Icon(Icons.person_outline_rounded, size: 18),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                post.writer,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                _date(post.createdAt),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Colors.black45),
-              ),
-            ],
+    return AppGlassSurface(
+      borderRadius: BorderRadius.circular(22),
+      blurSigma: 12,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Colors.white.withValues(alpha: .46),
+            child: const Icon(Icons.person_outline_rounded, size: 18),
           ),
-        ),
-        const Icon(Icons.schedule_rounded, size: 15, color: Colors.black38),
-        const SizedBox(width: 5),
-        Text(
-          '${_readMinutes(post.content)} min read',
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall
-              ?.copyWith(color: Colors.black45),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  post.writer,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  _date(post.createdAt),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.black45),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.schedule_rounded, size: 15, color: Colors.black38),
+          const SizedBox(width: 5),
+          Text(
+            '${_readMinutes(post.content)} min read',
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall
+                ?.copyWith(color: Colors.black45),
+          ),
+        ],
+      ),
     );
   }
 
