@@ -20,10 +20,6 @@ Flutter, Riverpod, Firestore, Firebase Storage로 만든 Android 중심의 모�
 
 <p align="center"><sub>Write & edit / 작성·수정 · Local cover gallery / 로컬 커버 갤러리</sub></p>
 
-The screenshots were captured from an Android Emulator. Portfolio sample posts use bundled local development photography, so the preview remains visually complete without depending on runtime network images.
-
-모든 화면은 Android Emulator에서 캡처했습니다. 포트폴리오 샘플 글은 앱에 포함된 로컬 개발 관련 이미지를 사용하므로, 실행 중 네트워크 이미지에 의존하지 않아도 완성된 화면을 확인할 수 있습니다.
-
 ## What it does / 주요 기능
 
 - Presents recent developer notes with category, title, excerpt, author, date, and cover imagery. / 카테고리, 제목, 요약, 작성자, 날짜, 커버 이미지를 포함한 최근 개발 기록 피드를 제공합니다.
@@ -64,13 +60,12 @@ Sample content is used only as a portfolio presentation fallback. When Firestore
 - Cloud Firestore
 - Firebase Storage
 - Image Picker
-- Android Emulator
 
 ## Run / 실행
 
 ```bash
 flutter pub get
-flutter run -d emulator-5554
+flutter run
 ```
 
 The repository contains the generated Firebase client configuration used by the app. Live writes require the configured Firebase project to have the necessary Firestore and Storage services and permissions available. If live data is unavailable, the local portfolio preview remains usable.
