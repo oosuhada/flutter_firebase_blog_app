@@ -65,12 +65,14 @@ Sample content is used only as a portfolio presentation fallback. When Firestore
 
 ```bash
 flutter pub get
+cp lib/firebase_options.example.dart lib/firebase_options.dart
+# Replace the placeholders or run `flutterfire configure`.
 flutter run
 ```
 
-The repository contains the generated Firebase client configuration used by the app. Live writes require the configured Firebase project to have the necessary Firestore and Storage services and permissions available. If live data is unavailable, the local portfolio preview remains usable.
+Firebase configuration is local-only and ignored by Git. The repository provides `firebase_options.example.dart` without credentials; live writes require your own Firebase project with Firestore and Storage enabled. If live data is unavailable, the local portfolio preview remains usable.
 
-레포지토리에는 앱에서 사용하는 생성된 Firebase client 설정이 포함되어 있습니다. 실제 쓰기 기능을 사용하려면 연결된 Firebase 프로젝트에서 Firestore/Storage 서비스와 권한이 활성화되어 있어야 합니다. live data를 사용할 수 없는 경우에도 local portfolio preview는 정상적으로 확인할 수 있습니다.
+Firebase 설정은 로컬에서만 관리하며 Git에서 제외합니다. 저장소에는 credential이 없는 `firebase_options.example.dart`만 제공하며, 실제 쓰기 기능에는 Firestore와 Storage가 활성화된 별도 Firebase 프로젝트가 필요합니다. live data를 사용할 수 없는 경우에도 local portfolio preview는 정상적으로 확인할 수 있습니다.
 
 ## Architecture & Topics / 아키텍처 및 주제
 
